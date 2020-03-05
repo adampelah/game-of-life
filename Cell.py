@@ -3,9 +3,6 @@
 I thought it would be a good idea to seperate the classes by file for better readability
 """
 
-
-
-
 class Cell:
 #-----------------------------------------------------------------------------------
 #core atributes
