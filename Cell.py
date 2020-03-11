@@ -1,7 +1,8 @@
+import sys
+sys.path.append("..")
+from GameBoard import Board
+import random
 
-"""
-I thought it would be a good idea to seperate the classes by file for better readability
-"""
 
 class Cell:
 #-----------------------------------------------------------------------------------
@@ -12,7 +13,7 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
-  gameBoard = []
+  gameBoard = Board()
 #-----------------------------------------------------------------------------------
 #constructors
   def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus, board):
@@ -50,10 +51,6 @@ class Cell:
     self.Column = x
     self.Row = y
 
-  def movePos(self,x,y): # this function is tied to move function
-    self.Column += x # adding movement to horiz
-    self.Row += y # adding movement to vert
-  
   def addYear(self): # checks if year has happened
     if(self.timeHealthy + self.timeVirues %365 == 0): ## if a year has passed
       self.age+=1 # adding one year to the age
@@ -69,11 +66,25 @@ class Cell:
 
 # move functions---------------------------------------------------------------------------------
 
+  def movePos(self,x,y): # this function is tied to move function
+    self.Column += x # adding movement to horiz
+    if(self.Column < 0 or self.Column >= self.gameBoard.sizeX):
+      self.Column = 1
+    self.Row += y # adding movement to vert
+    if(self.Row < 0 or self.Row >= self.gameBoard.sizeX):
+      self.Column = 1
+    self.gameBoard.boardMove(self.Column, self.Row)
+
+  
+
   def move(self):
-    seed(8) # seeding random nujmber
-    x = randint(-1,1) # getting horiz value to add to new pos
-    y = randint(-1,1) # getting vert value to add to new pos
+    random.seed(10) # seeding random nujmber
+    x = random.randrange(-1,2) # getting horiz value to add to new pos
+    print(x)
+    y = random.randrange(0,2) # getting vert value to add to new pos
+    print(y)
     self.movePos(x,y)
+    self.gameBoard.show()
 
   # def deathRate(self):
   #   oldAge = (self.isOld()*0.10)
