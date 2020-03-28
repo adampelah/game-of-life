@@ -13,11 +13,11 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
-  gameBoard = Board()
+  #gameBoard = Board()
 #-----------------------------------------------------------------------------------
 #constructors
-  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus, board):
-    self.gameBoard = board
+  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus):
+    #self.gameBoard = board
     self.age = age
     self.infectionStatus = infectionStat # 1 or 0
     self.Column = column
@@ -97,4 +97,4 @@ class Cell:
   #   vulnerable = (self.isVulnerable()*0.2)
   #   print("Prob due to vulnerability is ", vulnerable)
   #   return (oldAge + probVirusDeath + vulnerable)
-  
+
