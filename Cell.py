@@ -81,7 +81,7 @@ class Cell:
     random.seed(10) # seeding random nujmber
     x = random.randrange(-1,2) # getting horiz value to add to new pos
     print(x)
-    y = random.randrange(0,2) # getting vert value to add to new pos
+    y = random.randrange(-1,2) # getting vert value to add to new pos
     print(y)
     self.movePos(x,y)
     self.gameBoard.show()
