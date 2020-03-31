@@ -78,8 +78,8 @@ class Cell:
   
 
   def move(self):
-    self.Row = random.randint(0, 100)
-    self.Column = random.randint(0, 100)
+    self.Row = random.randint(1, 99)
+    self.Column = random.randint(1, 99)
 
   # def deathRate(self):
   #   oldAge = (self.isOld()*0.10)
