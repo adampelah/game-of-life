@@ -7,12 +7,14 @@ import matplotlib.animation as animation
 sys.path.append("..")
 
 
-
-def fill_grid(grid, cell_dict):
+def setUpGrid(grid, cell_dict):
     for x in range(0, 99):
         for y in range(0, 99):
             if (x, y) in cell_dict:
                 grid[x][y] = cell_dict[x, y].infectionStatus  # Fill grid spot
+
+def fill_grid(grid, cell_dict):
+    
 
     for x in range(0, 99):
         for y in range(0, 99):
@@ -28,6 +30,8 @@ def fill_grid(grid, cell_dict):
 
 def main():
 
+    infectedCount = 0
+    healthyCount = 0
     # CREATE GRID, POPULATE
     grid = np.zeros((100, 100))
 
@@ -37,7 +41,7 @@ def main():
     randomCoord.append( rd.randint(0, 99)) # location x
     randomCoord.append( rd.randint(0, 99)) # location y
     
-    for x in range(0, 500):
+    for x in range(0, 200):
 
         while (grid[randomCoord[0], randomCoord[1]] != 0):
             randomCoord[0] = rd.randint(0, 99) # location x
@@ -46,6 +50,10 @@ def main():
         infectionChance = rd.randint(1,3)
         if(infectionChance == 3):
             infectedStatus = 2
+            infectedCount += 1
+        else:
+            healthyCount += 1
+
         infectedStatus = 1
         new_cell = Cell(rd.randint(1, 80), # age
                         infectedStatus, # infection stat
@@ -60,10 +68,14 @@ def main():
 
 
    
+    setUpGrid(grid,cell_dict)
     for x in range(0, 100000):
         plt.imshow(grid)
+        plt.title("Population: " + str(len(cell_dict)))
+        plt.xlabel("starting infection count = " + str(infectedCount))
         fill_grid(grid, cell_dict)
         plt.pause(0.000005)
         plt.clf()
+      
        
 main()
