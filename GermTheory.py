@@ -9,8 +9,8 @@ sys.path.append("..")
 
 
 def fill_grid(grid, cell_dict):
-    for x in range(0, 100):
-        for y in range(0, 100):
+    for x in range(0, 99):
+        for y in range(0, 99):
             if (x, y) in cell_dict:
                 grid[x][y] = cell_dict[x, y].infectionStatus  # Fill grid spot
 
@@ -32,11 +32,20 @@ def main():
 
     # CREATE dictionary of cells, accessed by row and col
     cell_dict = {}
+    randomCoord = []
+    randomCoord.append( rd.randint(0, 99)) # location x
+    randomCoord.append( rd.randint(0, 99)) # location y
+    
     for x in range(0, 1000):
+
+        while (grid[randomCoord[0], randomCoord[1]] != 0):
+            randomCoord[0] = rd.randint(0, 99) # location x
+            randomCoord[1] = rd.randint(0,99) # location y
+
         new_cell = Cell(rd.randint(1, 80), # age
-                        rd.randint(0, 1), # infection stat
-                        rd.randint(0, 99), # location x
-                        rd.randint(0, 99), # location y
+                        rd.randint(1, 2), # infection stat
+                        randomCoord[0], # location x
+                        randomCoord[1], # location y
                         rd.randint(0, 255), # time virus
                         rd.randint(0, 255), # time
                         grid) 
@@ -45,11 +54,11 @@ def main():
         grid [new_cell.Row, new_cell.Column] = new_cell.infectionStatus
 
 
-    
-
+   
     for x in range(0, 100000):
         plt.imshow(grid)
         fill_grid(grid, cell_dict)
         plt.pause(0.000005)
         plt.clf()
+        print("number of cells on the board: " + str(len(cell_dict)))
 main()
