@@ -14,8 +14,8 @@ def fill_grid(grid, cell_dict):
             if (x, y) in cell_dict:
                 grid[x][y] = cell_dict[x, y].infectionStatus  # Fill grid spot
 
-    for x in range(0, 100):
-        for y in range(0, 100):
+    for x in range(0, 99):
+        for y in range(0, 99):
             if(x, y) in cell_dict:
                 popped_cell = cell_dict.pop((x, y))
                 grid[x][y] = 0
@@ -24,20 +24,32 @@ def fill_grid(grid, cell_dict):
                 grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
 
+
 def main():
+
+    # CREATE GRID, POPULATE
+    grid = np.zeros((100, 100))
 
     # CREATE dictionary of cells, accessed by row and col
     cell_dict = {}
     for x in range(0, 1000):
-        new_cell = Cell(rd.randint(1, 80), rd.randint(0, 1), rd.randint(0, 100),
-                    rd.randint(0, 100), rd.randint(0, 255), rd.randint(0, 255))
-        cell_dict[new_cell.Row, new_cell.Column] = new_cell
+        new_cell = Cell(rd.randint(1, 80), # age
+                        rd.randint(0, 1), # infection stat
+                        rd.randint(0, 99), # location x
+                        rd.randint(0, 99), # location y
+                        rd.randint(0, 255), # time virus
+                        rd.randint(0, 255), # time
+                        grid) 
 
-    # CREATE GRID, POPULATE
-    grid = np.zeros((100, 100))
-    for x in range(0, 100):
+        cell_dict[new_cell.Row, new_cell.Column] = new_cell
+        grid [new_cell.Row, new_cell.Column] = new_cell.infectionStatus
+
+
+    
+
+    for x in range(0, 100000):
         plt.imshow(grid)
         fill_grid(grid, cell_dict)
-        plt.pause(0.005)
+        plt.pause(0.000005)
         plt.clf()
 main()
