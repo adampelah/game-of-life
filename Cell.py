@@ -13,17 +13,19 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
-  #gameBoard = Board()
+  gameBoard = []
+ 
 #-----------------------------------------------------------------------------------
 #constructors
-  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus):
-    #self.gameBoard = board
+  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus, board):
+   
     self.age = age
     self.infectionStatus = infectionStat # 1 or 0
     self.Column = column
     self.Row = row
     self.timeHealthy = timehealthy
     self.timeVirus = timevirus
+    self.gameBoard = board
 
 #------------------------------------------------------------------------------------
 #get functions for core attributes
@@ -48,8 +50,17 @@ class Cell:
 #set functions
 
   def setPos(self,x,y): # setting x,y coords
-    self.Column = x
-    self.Row = y
+    if(x > 99):
+      self.Row = x -1
+    if (y > 99):
+      self.Column = y -1
+    if ( x < 1):
+      self.Row = x + 1
+    if (y < 1):
+      self.getColumn = y +1
+
+    self.Column = y
+    self.Row = x
 
   def addYear(self): # checks if year has happened
     if(self.timeHealthy + self.timeVirues %365 == 0): ## if a year has passed
@@ -78,9 +89,12 @@ class Cell:
   
 
   def move(self):
-
-    self.Row = random.randint(1, 99)
-    self.Column = random.randint(1, 99)
+    self.setPos(
+      self.Row + (random.randint(-1,1)),
+      self.Column + (random.randint(-1,1))
+    )
+    # self.Row = random.randint(1, 99)
+    # self.Column = random.randint(1, 99)
  
 
   # def deathRate(self):
