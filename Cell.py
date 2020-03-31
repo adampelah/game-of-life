@@ -78,13 +78,8 @@ class Cell:
   
 
   def move(self):
-    random.seed(10) # seeding random nujmber
-    x = random.randrange(-1,2) # getting horiz value to add to new pos
-    print(x)
-    y = random.randrange(0,2) # getting vert value to add to new pos
-    print(y)
-    self.movePos(x,y)
-    self.gameBoard.show()
+    self.Row = random.randint(0, 100)
+    self.Column = random.randint(0, 100)
 
   # def deathRate(self):
   #   oldAge = (self.isOld()*0.10)
