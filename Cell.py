@@ -95,9 +95,18 @@ class Cell:
     y = self.Column + (random.randint(-1,1))
    
     while(self.gameBoard[x,y] != 0):
+      self.collision()
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
+
     self.setPos( x, y)
+
+  def collision(self):
+    if(self.infectionStatus == 1):
+      x = random.randint(0,2)
+      if (x == 2):
+        self.infectionStatus = 2
+
  
 
   # def deathRate(self):

@@ -20,6 +20,7 @@ def fill_grid(grid, cell_dict):
                 popped_cell = cell_dict.pop((x, y))
                 grid[x][y] = 0
                 popped_cell.move()  # call move on cell
+
                 cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                 grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
@@ -36,14 +37,18 @@ def main():
     randomCoord.append( rd.randint(0, 99)) # location x
     randomCoord.append( rd.randint(0, 99)) # location y
     
-    for x in range(0, 1000):
+    for x in range(0, 500):
 
         while (grid[randomCoord[0], randomCoord[1]] != 0):
             randomCoord[0] = rd.randint(0, 99) # location x
             randomCoord[1] = rd.randint(0,99) # location y
 
+        infectionChance = rd.randint(1,3)
+        if(infectionChance == 3):
+            infectedStatus = 2
+        infectedStatus = 1
         new_cell = Cell(rd.randint(1, 80), # age
-                        rd.randint(1, 2), # infection stat
+                        infectedStatus, # infection stat
                         randomCoord[0], # location x
                         randomCoord[1], # location y
                         rd.randint(0, 255), # time virus
@@ -60,5 +65,5 @@ def main():
         fill_grid(grid, cell_dict)
         plt.pause(0.000005)
         plt.clf()
-        print("number of cells on the board: " + str(len(cell_dict)))
+       
 main()
