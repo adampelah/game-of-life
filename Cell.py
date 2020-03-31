@@ -50,14 +50,15 @@ class Cell:
 #set functions
 
   def setPos(self,x,y): # setting x,y coords
-    if(x > 99):
-      self.Row = x -1
-    if (y > 99):
-      self.Column = y -1
-    if ( x < 1):
-      self.Row = x + 1
-    if (y < 1):
-      self.getColumn = y +1
+
+    if(x >= 99):
+      return
+    if (y >= 99):
+      return
+    if ( x <= 1):
+      return
+    if (y <= 1):
+      return
 
     self.Column = y
     self.Row = x
@@ -89,12 +90,23 @@ class Cell:
   
 
   def move(self):
-    self.setPos(
-      self.Row + (random.randint(-1,1)),
-      self.Column + (random.randint(-1,1))
-    )
-    # self.Row = random.randint(1, 99)
-    # self.Column = random.randint(1, 99)
+
+    x = self.Row + (random.randint(-1,1))
+    y = self.Column + (random.randint(-1,1))
+   
+    while(self.gameBoard[x,y] != 0):
+      self.collision()
+      x = self.Row + (random.randint(-1,1))
+      y = self.Column + (random.randint(-1,1))
+
+    self.setPos( x, y)
+
+  def collision(self):
+    if(self.infectionStatus == 1):
+      x = random.randint(0,2)
+      if (x == 2):
+        self.infectionStatus = 2
+
  
 
   # def deathRate(self):
