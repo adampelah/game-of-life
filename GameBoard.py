@@ -54,7 +54,7 @@ class Board:
                 if (x, y) in self.cell_dict:
                     popped_cell = self.cell_dict.pop((x, y))
                     self.grid[x][y] = 0
-                    popped_cell.move()  # call move on cell
+                    popped_cell.move(self.cell_dict) # call move on cell
                     self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                     self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 

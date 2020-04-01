@@ -88,17 +88,21 @@ class Cell:
 
   
 
-  def move(self):
+  def move(self, cellDict):
 
+    
     x = self.Row + (random.randint(-1,1))
     y = self.Column + (random.randint(-1,1))
    
     while(self.gameBoard[x,y] != 0):
-      self.collision()
+      if cellDict[x,y].infectionStatus == 2:
+        self.collision()
+
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
-
+      
     self.setPos(x, y)
+ 
 
   def collision(self):
     if(self.infectionStatus == 1):
