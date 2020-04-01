@@ -55,7 +55,7 @@ class Board:
                     popped_cell = self.cell_dict.pop((x, y))
                     self.grid[x][y] = 0
                     popped_cell.move(self.cell_dict) # call move on cell
-
+                    popped_cell.deathRate()
                     self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                     self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
@@ -66,7 +66,5 @@ class Board:
             plt.title("Population: " + str(len(self.cell_dict)))
             plt.xlabel("starting infection count = " + str(self.infectedCount))
             self.update_grid()
-            plt.pause(0.000005)
+            plt.pause(0.0000005)
             plt.clf()
-        
-

@@ -43,6 +43,8 @@ class Cell:
     return int((self.age >= 74) or (self.age <=4))
   def isOld(self):
     return int(self.age >= 74)
+  def hasVirus(self):
+    return self.infectionStatus == 2
 
 # -----------------------------------------------------------------------------------------
 #set functions
@@ -99,15 +101,11 @@ class Cell:
 
  
 
-  # def deathRate(self):
-  #   oldAge = (self.isOld()*0.10)
-  #   print("Prob due to oldAge is ", oldAge)
-  #   mean = 70 # 70 days for top virus death
-  #   stdev = 2 # 2 days for standard deviation
-  #   probVirusDeath = scipy.stats.norm(500,100).cdf(self.timeVirus)-0.01 # doens't work :()
-  #   probVirusDeath = (probVirusDeath - 0.1)/(0.5-0.1)
-  #   print("Prob due to virus is ", probVirusDeath)
-  #   vulnerable = (self.isVulnerable()*0.2)
-  #   print("Prob due to vulnerability is ", vulnerable)
-  #   return (oldAge + probVirusDeath + vulnerable)
+  def deathRate(self):
+    virus = self.hasVirus()*0.005
+    vulnerable = (self.isVulnerable()*0.005)
+    daily = 0.005
+    total = (daily + vulnerable + virus)
+    if random.random() <= total:
+      self.infectionStatus = 0
 
