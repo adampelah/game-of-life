@@ -21,13 +21,13 @@ class Board:
 
     def createPopulation (self, population, infected): # this function creates a population based on perameters and board
 
-        self.population = population
+        self.population = population + 1
         self.infectedCount = infected
         randomCoord = [0,0]
         randomCoord[0] = (rd.randint(0, self.size -1))  # location x
         randomCoord[1] = (rd.randint(0, self.size -1))  # location y
 
-        for x in range(0, population):
+        for x in range(0, self.population -1):
 
             infectionStatus = 1
             if x < infected: # this condition creates number of ifected sells specified by perameters
@@ -43,18 +43,19 @@ class Board:
                             randomCoord[1],  # location y
                             rd.randint(0, 255),  # time virus
                             rd.randint(0, 255),  # time
-                            self.grid) 
+                            self) 
 
             self.cell_dict[new_cell.Row, new_cell.Column] = new_cell
             self.grid[new_cell.Row, new_cell.Column] = new_cell.infectionStatus
         
     def update_grid(self):
-        for x in range(0, 99):
-            for y in range(0, 99):
+        for x in range(0, self.size-1):
+            for y in range(0, self.size-1):
                 if (x, y) in self.cell_dict:
                     popped_cell = self.cell_dict.pop((x, y))
                     self.grid[x][y] = 0
                     popped_cell.move(self.cell_dict) # call move on cell
+
                     self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                     self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
@@ -63,7 +64,7 @@ class Board:
         for x in range(0, 100000):
             plt.imshow(self.grid)
             plt.title("Population: " + str(len(self.cell_dict)))
-            #plt.xlabel("starting infection count = " + str(self.infectedCount))
+            plt.xlabel("starting infection count = " + str(self.infectedCount))
             self.update_grid()
             plt.pause(0.000005)
             plt.clf()

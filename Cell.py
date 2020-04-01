@@ -12,7 +12,6 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
-  gameBoard = []
  
 #-----------------------------------------------------------------------------------
 #constructors
@@ -48,20 +47,6 @@ class Cell:
 # -----------------------------------------------------------------------------------------
 #set functions
 
-  def setPos(self,x,y): # setting x,y coords
-
-    if(x >= 99):
-      return
-    if (y >= 99):
-      return
-    if ( x <= 1):
-      return
-    if (y <= 1):
-      return
-
-    self.Column = y
-    self.Row = x
-
   def addYear(self): # checks if year has happened
     if(self.timeHealthy + self.timeVirues %365 == 0): ## if a year has passed
       self.age+=1 # adding one year to the age
@@ -76,39 +61,41 @@ class Cell:
     self.infectionStatus = stat
 
 # move functions---------------------------------------------------------------------------------
+  def setPos(self,x,y): # setting x,y coords
+                        # this function checks the bounds of the board
+    if(x >= self.gameBoard.size -1):
+      return
+    if (y >= self.gameBoard.size - 1):
+      return
+    if ( x <= 1):
+      return
+    if (y <= 1):
+      return
 
-  def movePos(self,x,y): # this function is tied to move function
-    self.Column += x # adding movement to horiz
-    if(self.Column < 0 or self.Column >= self.gameBoard.sizeX):
-      self.Column = 1
-    self.Row += y # adding movement to vert
-    if(self.Row < 0 or self.Row >= self.gameBoard.sizeX):
-      self.Column = 1
-    self.gameBoard.boardMove(self.Column, self.Row)
-
-  
+    self.Column = y
+    self.Row = x
 
   def move(self, cellDict):
 
-    
     x = self.Row + (random.randint(-1,1))
     y = self.Column + (random.randint(-1,1))
-   
-    while(self.gameBoard[x,y] != 0):
+    
+    while(self.gameBoard.grid[x,y] != 0):
       if cellDict[x,y].infectionStatus == 2:
         self.collision()
 
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
-      
+
     self.setPos(x, y)
- 
+
 
   def collision(self):
     if(self.infectionStatus == 1):
       x = random.randint(0,2)
       if (x == 2):
         self.infectionStatus = 2
+        self.gameBoard.infectedCount += 1 # updating infected count of population
 
  
 
