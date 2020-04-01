@@ -1,6 +1,5 @@
 import sys
 sys.path.append("..")
-from GameBoard import Board
 import random
 
 
@@ -36,11 +35,11 @@ class Cell:
   def getAge(self):
     return self.age
   def get_timeHealthy(self):
-    return timeHealthy
+    return self.timeHealthy
   def get_timeVirus(self):
-    return timeVirus
+    return self.timeVirus
   def getInfectionStatus(self):
-    return infectionStatus
+    return self.infectionStatus
   def isVulnerable(self):
     return int((self.age >= 74) or (self.age <=4))
   def isOld(self):
@@ -99,7 +98,7 @@ class Cell:
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
 
-    self.setPos( x, y)
+    self.setPos(x, y)
 
   def collision(self):
     if(self.infectionStatus == 1):
