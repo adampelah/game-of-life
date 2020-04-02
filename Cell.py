@@ -12,16 +12,17 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
+
  
 #-----------------------------------------------------------------------------------
 #constructors
-  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus, board):
+  def __init__ (self, age, infectionStat,row, column, timevirus, board):
    
     self.age = age
     self.infectionStatus = infectionStat # 1 or 0
     self.Column = column
     self.Row = row
-    self.timeHealthy = timehealthy
+    self.time = 0
     self.timeVirus = timevirus
     self.gameBoard = board
 
@@ -93,6 +94,7 @@ class Cell:
       y = self.Column + (random.randint(-1,1))
 
     self.setPos(x, y)
+    self.time += 1
 
 
   def collision(self):
@@ -110,6 +112,7 @@ class Cell:
     daily = 0.005
     total = (daily + vulnerable + virus)
     if random.random() <= total:
+      self.gameBoard.infectedCount -= 1
       return 1
     return 0
 

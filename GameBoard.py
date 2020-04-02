@@ -41,7 +41,6 @@ class Board:
                             infectionStatus,  # infection stat
                             randomCoord[0],  # location x
                             randomCoord[1],  # location y
-                            rd.randint(0, 255),  # time virus
                             rd.randint(0, 255),  # time
                             self) 
 
@@ -56,9 +55,13 @@ class Board:
                     self.grid[x][y] = 0
                     popped_cell.move(self.cell_dict) # call move on cell
 
-                    if(popped_cell.deathRate() == 0):
+                    if(popped_cell.time % 10 != 0):
                         self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                         self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
+                    else:
+                        if(popped_cell.deathRate() == 0):
+                            self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
+                            self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
 
     def show(self):
