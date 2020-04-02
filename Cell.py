@@ -79,8 +79,11 @@ class Cell:
 
   def move(self, cellDict):
 
-    x = self.Row + (random.randint(-1,1))
-    y = self.Column + (random.randint(-1,1))
+    while True:
+      x = self.Row + (random.randint(-1,1))
+      y = self.Column + (random.randint(-1,1))
+      if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:
+        break
     
     while(self.gameBoard.grid[x,y] != 0):
       if cellDict[x,y].infectionStatus == 2:
@@ -107,5 +110,6 @@ class Cell:
     daily = 0.005
     total = (daily + vulnerable + virus)
     if random.random() <= total:
-      self.infectionStatus = 0
+      return 1
+    return 0
 

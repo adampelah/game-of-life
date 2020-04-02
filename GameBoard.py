@@ -55,9 +55,10 @@ class Board:
                     popped_cell = self.cell_dict.pop((x, y))
                     self.grid[x][y] = 0
                     popped_cell.move(self.cell_dict) # call move on cell
-                    popped_cell.deathRate()
-                    self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
-                    self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
+
+                    if(popped_cell.deathRate() == 0):
+                        self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
+                        self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
 
     def show(self):
