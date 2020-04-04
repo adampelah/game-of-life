@@ -6,8 +6,8 @@ import random
 class Cell:
 #-----------------------------------------------------------------------------------
 #core atributes
-  infectionStatus = 0 # once a Cell is not alive, it should destruct, and return false
-  Column = 0 # tracking positiong of the Cell
+  infectionStatus = 0  # once a Cell is not alive, it should destruct, and return false
+  Column = 0  # tracking position of the Cell
   Row = 0
   age = 0
   timeHealthy = 0
@@ -51,10 +51,10 @@ class Cell:
 #set functions
 
   def addYear(self): # checks if year has happened
-    if(self.timeHealthy + self.timeVirues %365 == 0): ## if a year has passed
+    if(self.timeHealthy + self.timeVirus %365 == 0): ## if a year has passed
       self.age+=1 # adding one year to the age
 
-  def set_timeVirus(self,num):
+  def set_timeVirus(self, num):
     self.timeVirus = num
   
   def set_timeHealthy(self, num):
@@ -64,8 +64,8 @@ class Cell:
     self.infectionStatus = stat
 
 # move functions---------------------------------------------------------------------------------
-  def setPos(self,x,y): # setting x,y coords
-                        # this function checks the bounds of the board
+  def setPos(self,x,y):  # setting x,y coords
+    # this function checks the bounds of the board
     if(x >= self.gameBoard.size -1):
       return
     if (y >= self.gameBoard.size - 1):
@@ -83,30 +83,27 @@ class Cell:
     while True:
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
-      if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:
+      if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:  # check boundaries of board
         break
     
-    while(self.gameBoard.grid[x,y] != 0):
-      if cellDict[x,y].infectionStatus == 2:
+    while(self.gameBoard.grid[x,y] != 0):  # Running collision
+      if cellDict[x, y].infectionStatus == 2:
         self.collision()
 
       x = self.Row + (random.randint(-1,1))
       y = self.Column + (random.randint(-1,1))
 
     self.setPos(x, y)
-    self.time += 1
+    self.time += 1  # Time of cell updated
 
-
-  def collision(self):
+  def collision(self):  # Collision function with other cells
     if(self.infectionStatus == 1):
-      x = random.randint(0,2)
+      x = random.randint(0, 2)
       if (x == 2):
-        self.infectionStatus = 2
-        self.gameBoard.infectedCount += 1 # updating infected count of population
+        self.infectionStatus = 2  # set to infected
+        self.gameBoard.infectedCount += 1  # updating infected count of population
 
- 
-
-  def deathRate(self):
+  def deathRate(self):  # All encompassing death rate function for cells.
     virus = self.hasVirus()*0.005
     vulnerable = (self.isVulnerable()*0.005)
     daily = 0.005
