@@ -1,6 +1,5 @@
 import sys
 sys.path.append("..")
-from GameBoard import Board
 import random
 
 
@@ -13,17 +12,19 @@ class Cell:
   age = 0
   timeHealthy = 0
   timeVirus = 0
-  #gameBoard = Board()
+
+ 
 #-----------------------------------------------------------------------------------
 #constructors
-  def __init__ (self, age, infectionStat,row, column, timehealthy, timevirus):
-    #self.gameBoard = board
+  def __init__ (self, age, infectionStat,row, column, timevirus, board):
+   
     self.age = age
     self.infectionStatus = infectionStat # 1 or 0
     self.Column = column
     self.Row = row
-    self.timeHealthy = timehealthy
+    self.time = 0
     self.timeVirus = timevirus
+    self.gameBoard = board
 
 #------------------------------------------------------------------------------------
 #get functions for core attributes
@@ -34,22 +35,20 @@ class Cell:
   def getAge(self):
     return self.age
   def get_timeHealthy(self):
-    return timeHealthy
+    return self.timeHealthy
   def get_timeVirus(self):
-    return timeVirus
+    return self.timeVirus
   def getInfectionStatus(self):
-    return infectionStatus
+    return self.infectionStatus
   def isVulnerable(self):
     return int((self.age >= 74) or (self.age <=4))
   def isOld(self):
     return int(self.age >= 74)
+  def hasVirus(self):
+    return self.infectionStatus == 2
 
 # -----------------------------------------------------------------------------------------
 #set functions
-
-  def setPos(self,x,y): # setting x,y coords
-    self.Column = x
-    self.Row = y
 
   def addYear(self): # checks if year has happened
     if(self.timeHealthy + self.timeVirues %365 == 0): ## if a year has passed
@@ -65,33 +64,55 @@ class Cell:
     self.infectionStatus = stat
 
 # move functions---------------------------------------------------------------------------------
+  def setPos(self,x,y): # setting x,y coords
+                        # this function checks the bounds of the board
+    if(x >= self.gameBoard.size -1):
+      return
+    if (y >= self.gameBoard.size - 1):
+      return
+    if ( x <= 1):
+      return
+    if (y <= 1):
+      return
 
-  def movePos(self,x,y): # this function is tied to move function
-    self.Column += x # adding movement to horiz
-    if(self.Column < 0 or self.Column >= self.gameBoard.sizeX):
-      self.Column = 1
-    self.Row += y # adding movement to vert
-    if(self.Row < 0 or self.Row >= self.gameBoard.sizeX):
-      self.Column = 1
-    self.gameBoard.boardMove(self.Column, self.Row)
+    self.Column = y
+    self.Row = x
 
-  
+  def move(self, cellDict):
 
-  def move(self):
+    while True:
+      x = self.Row + (random.randint(-1,1))
+      y = self.Column + (random.randint(-1,1))
+      if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:
+        break
+    
+    while(self.gameBoard.grid[x,y] != 0):
+      if cellDict[x,y].infectionStatus == 2:
+        self.collision()
 
-    self.Row = random.randint(1, 99)
-    self.Column = random.randint(1, 99)
+      x = self.Row + (random.randint(-1,1))
+      y = self.Column + (random.randint(-1,1))
+
+    self.setPos(x, y)
+    self.time += 1
+
+
+  def collision(self):
+    if(self.infectionStatus == 1):
+      x = random.randint(0,2)
+      if (x == 2):
+        self.infectionStatus = 2
+        self.gameBoard.infectedCount += 1 # updating infected count of population
+
  
 
-  # def deathRate(self):
-  #   oldAge = (self.isOld()*0.10)
-  #   print("Prob due to oldAge is ", oldAge)
-  #   mean = 70 # 70 days for top virus death
-  #   stdev = 2 # 2 days for standard deviation
-  #   probVirusDeath = scipy.stats.norm(500,100).cdf(self.timeVirus)-0.01 # doens't work :()
-  #   probVirusDeath = (probVirusDeath - 0.1)/(0.5-0.1)
-  #   print("Prob due to virus is ", probVirusDeath)
-  #   vulnerable = (self.isVulnerable()*0.2)
-  #   print("Prob due to vulnerability is ", vulnerable)
-  #   return (oldAge + probVirusDeath + vulnerable)
+  def deathRate(self):
+    virus = self.hasVirus()*0.005
+    vulnerable = (self.isVulnerable()*0.005)
+    daily = 0.005
+    total = (daily + vulnerable + virus)
+    if random.random() <= total:
+      self.gameBoard.infectedCount -= 1
+      return 1
+    return 0
 
