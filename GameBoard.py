@@ -24,8 +24,8 @@ class Board:
         self.population = population + 1
         self.infectedCount = infected
         randomCoord = [0,0]
-        randomCoord[0] = (rd.randint(0, self.size -1))  # location x
-        randomCoord[1] = (rd.randint(0, self.size -1))  # location y
+        randomCoord[0] = (rd.randint(1, self.size - 1))  # location x
+        randomCoord[1] = (rd.randint(1, self.size - 1))  # location y
 
         for x in range(0, self.population -1):
 
@@ -55,7 +55,7 @@ class Board:
                 if (x, y) in self.cell_dict:
                     popped_cell = self.cell_dict.pop((x, y))  # get cell from 'grid' (accessed via dictionary)
                     self.grid[x][y] = 0  # set grid cell to 0
-                    popped_cell.move(self.cell_dict)  # call move on cell
+                    popped_cell.move()  # call move on cell
 
                     if(popped_cell.time % 10 != 0):  # Every 10 moves, no deaths
                         self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
