@@ -6,6 +6,7 @@ from scipy import signal
 import numpy
 
 
+
 class Cell:
     # -----------------------------------------------------------------------------------
     # core atributes
@@ -89,20 +90,25 @@ class Cell:
         self.Row = x
 
     def returnKernel(self):
-      miniboard = numpy.ones((3, 3), dtype=int)
-      miniboard[0][0] = self.gameBoard.grid[(self.Row - 1) % self.gameBoard.size][
-        (self.Column - 1) % self.gameBoard.size]
-      miniboard[0][1] = self.gameBoard.grid[(self.Row - 1) % self.gameBoard.size][(self.Column)]
-      miniboard[0][2] = self.gameBoard.grid[(self.Row - 1) % self.gameBoard.size][
-        (self.Column + 1) % self.gameBoard.size]
-      miniboard[1][0] = self.gameBoard.grid[(self.Row)][(self.Column - 1) % self.gameBoard.size]
+      miniboard = numpy.ones((3, 3), dtype=int) # this function creates a sub grid of neighbors around cell
+      gameGrid = self.gameBoard.grid
+      gameSize = self.gameBoard.size
+      #------------------------------------
+      rowDown = self.Row - 1 # these variables represent pos on grid next to cell
+      rowUp = self.Row + 1
+      columnDown = self.Column -1 
+      columnUp = self.Column + 1
+
+      miniboard[0][0] = gameGrid[(rowDown) % gameSize][columnDown % gameSize]        
+      miniboard[0][1] = gameGrid[rowDown % gameSize][(self.Column)]
+      miniboard[0][2] = gameGrid[rowDown % gameSize][columnUp % gameSize]
+      miniboard[1][0] = gameGrid[(self.Row)][columnDown % gameSize]
       miniboard[1][1] = self.infectionStatus
-      miniboard[1][2] = self.gameBoard.grid[(self.Row)][(self.Column + 1) % self.gameBoard.size]
-      miniboard[2][0] = self.gameBoard.grid[(self.Row + 1) % self.gameBoard.size][
-        (self.Column - 1) % self.gameBoard.size]
-      miniboard[2][1] = self.gameBoard.grid[(self.Row + 1) % self.gameBoard.size][(self.Column)]
-      miniboard[2][2] = self.gameBoard.grid[(self.Row + 1) % self.gameBoard.size][
-        (self.Column + 1) % self.gameBoard.size]
+      miniboard[1][2] = gameGrid[(self.Row)][columnUp % gameSize]
+      miniboard[2][0] = gameGrid[rowUp % gameSize][columnDown % gameSize]
+      miniboard[2][1] = gameGrid[rowUp % gameSize][(self.Column)]
+      miniboard[2][2] = gameGrid[rowUp % gameSize][columnUp % gameSize]
+
       return miniboard
 
 
@@ -122,20 +128,16 @@ class Cell:
         x = random.randrange(0, len(j))
         minindex = j[x]
         newrow, newcol = self.getPosInGrid(minindex[0] - 1, minindex[1]- 1)
-        #print("Mini section of board\n", miniboard, "Neighbour count for section\n", neighbour, minindex, newrow, newcol)
-        # if(self.gameBoard.grid[newrow][newcol]!=0):
-        # IF POSITION OCCUPIED, perform collision
-        # self.collision()
 
       elif(self.infectionStatus==2):
         #SET RANDOM POSITION FOR INFECTED CELLS
        newrow = self.Row + (random.randint(-1, 1))
        newcol = self.Column + (random.randint(-1, 1))
-
+       
         # IF POSITION OCCUPIED, perform collision
-        # if(self.gameBoard.grid[newrow][newcol]!=0):
-        # self.collision()
-
+      if(self.gameBoard.grid[newrow][newcol]!=0):
+          self.collision()
+      self.time +=1
       self.setPos(newrow, newcol)
 
     def collision(self):  # Collision function with other cells
@@ -146,8 +148,8 @@ class Cell:
                 self.gameBoard.infectedCount += 1  # updating infected count of population
 
     def deathRate(self):  # All encompassing death rate function for cells.
-        virus = self.hasVirus() * 0.00005
-        vulnerable = (self.isVulnerable() * 0.00005)
+        virus = self.hasVirus() 
+        vulnerable = self.isVulnerable()
         daily = 0.00005
         total = (daily + vulnerable + virus)
         if random.random() <= total:

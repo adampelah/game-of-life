@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
 from Cell import Cell
-
+from info import getTotalCases, getTotalDeaths, getDeathRate, getPopulation
 
 class Board:
 
@@ -61,13 +61,13 @@ class Board:
                         self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                         self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
                     else:
-                        if(popped_cell.deathRate() == 0):  # Otherwise, call for death
+                        #if(popped_cell.deathRate() == 0):  # Otherwise, call for death
                             self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
                             self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
 
 
     def show(self):
-        for x in range(0, 100000):  # Visualize the grid
+        while len(self.cell_dict) != 20:  # Visualize the grid
             plt.imshow(self.grid)
             plt.title("Population: " + str(len(self.cell_dict)))
             plt.xlabel("starting infection count = " + str(self.infectedCount))
