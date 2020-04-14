@@ -1,10 +1,7 @@
 import requests
 import pandas as pd 
 
-url = 'https://covidtracking.com/api/states'
 
-response = requests.request("GET", url)
-data = response.json()
 
 
 def prepareData():
@@ -29,10 +26,62 @@ def getPopulation(input):
     return int(data.at[state, 'population'])
 
 
+url = 'https://covidtracking.com/api/states'
+
+response = requests.request("GET", url)
+data = response.json()
+
+stateConversion = { "Alabma" :"AL",
+                    "Alaska": "AK",
+                    "Arizona": "AZ",
+                    "Arkansas" : "AR",
+                    "California" : "CA",
+                    "Connecticut" : "CO",
+                    "Delaware": "DE",
+                    "Florida" : "FL",
+                    "Georgia" : "GA",
+                    "Hawaii" : "HI",
+                    "Idaho" : "ID",
+                    "Illinois" : "IL",
+                    "Indiana" : "IN",
+                    "Iowa" : "IA",
+                    "Kansas" : "KS",
+                    "Kentucky" : "KY",
+                    "Louisiana" : "LA",
+                    "Maine": "ME",
+                    "Maryland" : "MD",
+                    "Massachusetts" : "MA",
+                    "Michigan" : "MI",
+                    "Minnesota" : "MN",
+                    "Mississipi" : "MS",
+                    "Missouri" : "MO",
+                    "Montana" : "MT",
+                    "Nebraska" : "Nevada",
+                    "New Hampshire" : "NH",
+                    "New Jersey" : "NJ",
+                    "New Mexico" : "NM",
+                    "New York" : "NY",
+                    "North Carolina" : "NC",
+                    "North Dakota" : "ND",
+                    "Ohio" : "OH",
+                    "Oklahoma" : "OK",
+                    "Oregon" : "OR",
+                    "Pennsylvania" :"PA",
+                    "Rhode Island" : "RI",
+                    "South Carolina" : "SC",
+                    "Tennessee" : "TN",
+                    "Texas" : "TX",
+                    "Utah" : "UT",
+                    "Vermont" : "VT",
+                    "Virginia" : "VA",
+                    "Washington" : "WA",
+                    "West Virginia" : "WV",
+                    "Wisconsin" : "WI",
+                    "Wyoming" : "WY"}
 
 def getState(state):
-    for index,list in enumerate(data):
-        if list['state'] == state:
+    for list in data:
+        if list['state'] == stateConversion.get(state):
             return list
 
 def getTotalCases(state):
@@ -46,4 +95,3 @@ def getTotalDeaths(state):
 def getDeathRate(state):
     return (getTotalDeaths(state)/getTotalCases(state)) * 100 
 
-print(getPopulation(input("what state?")))
