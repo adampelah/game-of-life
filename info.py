@@ -2,8 +2,6 @@ import requests
 import pandas as pd 
 
 
-
-
 def prepareData():
     populationData = pd.read_excel('populationExcel.xlsx', 0)
     for x in range (0, len(populationData.columns)):
