@@ -88,21 +88,17 @@ class Cell:
 
         self.Column = y
         self.Row = x
+        self.gameBoard.grid[x,y] = self.infectionStatus
 
-    def move(self, cellDict):
+    def move(self):
+        self.gameBoard.grid[self.Row, self.Column] = 0
         while True:
             x = self.Row + (random.randint(-1,1))
             y = self.Column + (random.randint(-1,1))
             if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:
+                if self.gameBoard.grid[x,y] == 2:
+                    self.collision()
                 break
-    
-        while(self.gameBoard.grid[x,y] != 0):
-            if cellDict[x,y].infectionStatus == 2:
-                self.collision()
-
-            x = self.Row + (random.randint(-1,1))
-            y = self.Column + (random.randint(-1,1))
-
         self.setPos(x, y)
         self.time += 1
 
@@ -118,8 +114,8 @@ class Cell:
         virus = self.hasVirus() 
         vulnerable = self.isVulnerable()
         total = (vulnerable + virus)
-        print(total)
         if random.randint(0, 10) <= total:
             self.gameBoard.infectedCount -= 1
+            self.gameBoard.grid[self.Row, self.Column] = 0
             return 1
         return 0

@@ -31,7 +31,7 @@ url = 'https://covidtracking.com/api/states'
 response = requests.request("GET", url)
 data = response.json()
 
-stateConversion = { "Alabma" :"AL",
+stateConversion = { "Alabama" :"AL",
                     "Alaska": "AK",
                     "Arizona": "AZ",
                     "Arkansas" : "AR",
