@@ -5,8 +5,6 @@ import random
 from scipy import signal
 import numpy
 
-
-
 class Cell:
     # -----------------------------------------------------------------------------------
     # core atributes

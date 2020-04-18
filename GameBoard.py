@@ -60,7 +60,7 @@ class Board:
         for index,cell in enumerate(self.cell_list):
             if(cell.time % 45 == 0):
                 if(cell.deathRate()):
-                    self.cell_list.pop(index)
+                    self.cell_list.pop(index)            
             cell.move()
 
 
