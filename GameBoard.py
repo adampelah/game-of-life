@@ -30,6 +30,9 @@ class Board:
 
         self.population = self.relativePopulation(state)
         self.infectedCount = int(self.population * self.getPercentInfected(state))
+        if(self.infectedCount < 50):
+            self.infectedCount = 75
+       
         randomCoord = [0,0]
         randomCoord[0] = (rd.randint(1, self.size - 1))  # location x
         randomCoord[1] = (rd.randint(1, self.size - 1))  # location y
@@ -58,7 +61,7 @@ class Board:
         
     def update_grid(self):
         for index,cell in enumerate(self.cell_list):
-            if(cell.time % 45 == 0):
+            if(cell.time % 60 == 0):
                 if(cell.deathRate()):
                     self.cell_list.pop(index)            
             cell.move()
