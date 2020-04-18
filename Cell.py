@@ -5,6 +5,10 @@ import random
 from scipy import signal
 import numpy
 
+
+kernel = numpy.ones((3, 3), dtype=numpy.int8)
+kernel[1, 1] = 0
+
 class Cell:
     # -----------------------------------------------------------------------------------
     # core atributes
@@ -75,41 +79,58 @@ class Cell:
     # move functions---------------------------------------------------------------------------------
     def setPos(self,x,y): # setting x,y coords
                         # this function checks the bounds of the board
-        if(x > self.gameBoard.size -1):
+        if(x > self.gameBoard.size -1 or y > self.gameBoard.size-1 or x < 0 or y < 0):
             return
-        if (y > self.gameBoard.size - 1):
-            return
-        if ( x <= 1):
-            return
-        if (y <= 1):
-            return
-
+        self.gameBoard.grid[self.Row][self.Column] = 0
         self.Column = y
         self.Row = x
-        self.gameBoard.grid[x,y] = self.infectionStatus
+        self.gameBoard.grid[x, y] = self.infectionStatus
+
+    def returnKernel(self):
+        miniboard = numpy.ones((3, 3), dtype=int)
+        for x in range(0, 3):
+            for y in range(0, 3):
+                miniboard[x][y] = self.gameBoard.grid[self.Row-1+x% self.gameBoard.size-1][self.Row-1+y% self.gameBoard.size-1]
+        miniboard[1][1] = self.infectionStatus
+        return miniboard
+
+    def getPosInGrid(self, x, y):
+        return self.Row + x, self.Column + y
 
     def move(self):
-        self.gameBoard.grid[self.Row, self.Column] = 0
-        while True:
-            x = self.Row + (random.randint(-1,1))
-            y = self.Column + (random.randint(-1,1))
-            if x > 0 and x < self.gameBoard.size -1 and y > 0 and y < self.gameBoard.size -1:
-                if self.gameBoard.grid[x,y] == 2:
-                    self.collision()
-                break
-        self.setPos(x, y)
+
+        newrow = self.Row
+        newcol = self.Column
+        if (self.infectionStatus == 1):  # move for healthy cells, finding the least crowded space
+            miniboard = self.returnKernel()
+            neighbour = signal.convolve(miniboard, kernel, mode='same')  # count neighbors
+            neighbour[1][1] = 999
+            j = numpy.argwhere(neighbour == numpy.min(neighbour))
+            x = random.randrange(0, len(j))
+            minindex = j[x]
+            newrow, newcol = self.getPosInGrid(minindex[0] - 1, minindex[1] - 1)
+            if(self.Row < 0 or self.Column < 0):
+                print("Mini section of board\n", miniboard, "Neighbour count for section\n", neighbour, minindex, self.Row, self.Column, newrow, newcol)
+
+
+        elif (self.infectionStatus == 2):
+            # SET RANDOM POSITION FOR INFECTED CELLS
+            newrow = self.Row + (random.randint(-1, 1))
+            newcol = self.Column + (random.randint(-1, 1))
+
+        self.collision()
+        self.setPos(newrow, newcol)
         self.time += 1
 
-
     def collision(self):
-        if(self.infectionStatus == 1):
+        if(self.infectionStatus == 1 and self.gameBoard.grid[self.Row, self.Column] == 2):
             x = random.randint(0,2)
             if (x == 2):
                 self.infectionStatus = 2
                 self.gameBoard.infectedCount += 1 # updating infected count of population
 
     def deathRate(self):  # All encompassing death rate function for cells.
-        virus = self.hasVirus() 
+        virus = self.hasVirus()
         vulnerable = self.isVulnerable()
         total = (vulnerable + virus)
         if random.randint(0, 10) <= total:

@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import random as rd
 from Cell import Cell
 import info
-
+# from info import getTotalCases, getTotalDeaths, getDeathRate, getPopulation
 
 class Board:
 
@@ -21,7 +22,7 @@ class Board:
         cell_list = []
 
     def relativePopulation(self, state): # this function grabs population from census information
-        return int(info.getPopulationSize(state))
+        return int(info.getPopulation(state) / self.size **2)
     
     def getPercentInfected(self, state):
         return float(info.getTotalCases(state)/info.getPopulation(state))
@@ -56,22 +57,38 @@ class Board:
                             rd.randint(0, 255),  # time
                             self) 
 
-            self.cell_list.append( new_cell ) # add cell to dictionary
+            self.cell_list.append(new_cell)  # add cell to dictionary
             self.grid[new_cell.Row, new_cell.Column] = new_cell.infectionStatus  # add cell status to grid
         
     def update_grid(self):
         for index,cell in enumerate(self.cell_list):
             if(cell.time % 60 == 0):
                 if(cell.deathRate()):
-                    self.cell_list.pop(index)            
+                    self.cell_list.pop(index)
+                    continue
+            self.grid[self.size-1][self.size-1] = 2
             cell.move()
+       # img.set_data(self.grid)
+       # return img,
 
 
     def show(self):
+
+
+        # Different version of plotting, use  def update_grid(self, framenum, img):
+        # updateInterval = 50
+        # fig, ax = plt.subplots()
+        # img = ax.imshow(self.grid, interpolation='nearest')
+        # ani = animation.FuncAnimation(fig, self.update_grid, fargs=(img, ),
+        #                               frames=100000,
+        #                               interval=updateInterval,
+        #                               save_count=5)
+        #plt.show()
+
         while len(self.cell_list) > self.population/4:  # Visualize the grid
             plt.imshow(self.grid)
             plt.title("Population: " + str(len(self.cell_list)))
             plt.xlabel("starting infection count = " + str(self.infectedCount))
             self.update_grid()
-            plt.pause(0.0000005)
+            plt.pause(0.00001)
             plt.clf()
