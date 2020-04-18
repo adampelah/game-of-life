@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import random as rd
 from Cell import Cell
 import info
-# from info import getTotalCases, getTotalDeaths, getDeathRate, getPopulation
+
 
 class Board:
 
@@ -21,7 +21,7 @@ class Board:
         cell_list = []
 
     def relativePopulation(self, state): # this function grabs population from census information
-        return int(info.getPopulation(state)/ self.size **2)
+        return int(info.getPopulationSize(state))
     
     def getPercentInfected(self, state):
         return float(info.getTotalCases(state)/info.getPopulation(state))
