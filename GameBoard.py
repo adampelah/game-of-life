@@ -2,14 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
 from Cell import Cell
-
+import info
+# from info import getTotalCases, getTotalDeaths, getDeathRate, getPopulation
 
 class Board:
 
     # Core attributes
     size = 100
     grid = np.zeros((size, size))
-    cell_dict = {}
+    cell_list = []
     infectedCount = 0
     population = 0
     
@@ -17,20 +18,26 @@ class Board:
         
         self.size = inSize
         self.grid = np.zeros((inSize, inSize))
-        cell_dict = {}
+        cell_list = []
 
-    def createPopulation (self, population, infected):  # creates a population based on parameters and board
+    def relativePopulation(self, state): # this function grabs population from census information
+        return int(info.getPopulation(state)/ self.size **2)
+    
+    def getPercentInfected(self, state):
+        return float(info.getTotalCases(state)/info.getPopulation(state))
 
-        self.population = population + 1
-        self.infectedCount = infected
+    def createPopulation (self, state):  # creates a population based on parameters and board
+
+        self.population = self.relativePopulation(state)
+        self.infectedCount = int(self.population * self.getPercentInfected(state))
         randomCoord = [0,0]
         randomCoord[0] = (rd.randint(1, self.size - 1))  # location x
         randomCoord[1] = (rd.randint(1, self.size - 1))  # location y
 
-        for x in range(0, self.population -1):
+        for x in range(0, self.population):
 
             infectionStatus = 1
-            if x < infected: # this condition creates number of infected sells specified by parameters
+            if x < self.infectedCount: # this condition creates number of infected sells specified by parameters
                 infectionStatus = 2
 
             # get random coordinates for cell
@@ -46,30 +53,21 @@ class Board:
                             rd.randint(0, 255),  # time
                             self) 
 
-            self.cell_dict[new_cell.Row, new_cell.Column] = new_cell  # add cell to dictionary
+            self.cell_list.append( new_cell ) # add cell to dictionary
             self.grid[new_cell.Row, new_cell.Column] = new_cell.infectionStatus  # add cell status to grid
         
     def update_grid(self):
-        for x in range(0, self.size-1):
-            for y in range(0, self.size-1):
-                if (x, y) in self.cell_dict:
-                    popped_cell = self.cell_dict.pop((x, y))  # get cell from 'grid' (accessed via dictionary)
-                    self.grid[x][y] = 0  # set grid cell to 0
-                    popped_cell.move()  # call move on cell
-
-                    if(popped_cell.time % 10 != 0):  # Every 10 moves, no deaths
-                        self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
-                        self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
-                    else:
-                        if(popped_cell.deathRate() == 0):  # Otherwise, call for death
-                            self.cell_dict[popped_cell.Row, popped_cell.Column] = popped_cell
-                            self.grid[popped_cell.Row][popped_cell.Column] = popped_cell.infectionStatus
+        for index,cell in enumerate(self.cell_list):
+            if(cell.time % 45 == 0):
+                if(cell.deathRate()):
+                    self.cell_list.pop(index)            
+            cell.move()
 
 
     def show(self):
-        for x in range(0, 100000):  # Visualize the grid
+        while len(self.cell_list) > self.population/4:  # Visualize the grid
             plt.imshow(self.grid)
-            plt.title("Population: " + str(len(self.cell_dict)))
+            plt.title("Population: " + str(len(self.cell_list)))
             plt.xlabel("starting infection count = " + str(self.infectedCount))
             self.update_grid()
             plt.pause(0.0000005)
