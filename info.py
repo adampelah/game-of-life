@@ -24,6 +24,8 @@ def getPopulation(input):
     return int(data.at[state, 'population'])
 
 
+
+
 url = 'https://covidtracking.com/api/states'
 
 response = requests.request("GET", url)
@@ -93,3 +95,16 @@ def getTotalDeaths(state):
 def getDeathRate(state):
     return (getTotalDeaths(state)/getTotalCases(state)) * 100 
 
+# ------------------------------------------------------------------------
+def prepareLandMass():
+    landMassData = pd.read_excel('landMass.xlsx', 0)
+    landMassData.index = landMassData['states']
+    return landMassData.drop(columns=['states'])
+
+def getSquareMiles(state):
+    data = prepareLandMass()
+    return int(data.at[state, 'square miles'])
+
+def getPopulationSize(state):
+    item = getPopulation(state)/getSquareMiles(state)
+    return int(item * 10)
