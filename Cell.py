@@ -1,9 +1,11 @@
 import sys
 
 sys.path.append("..")
+import time
 import random
 from scipy import signal
 import numpy
+import time as tm
 
 
 kernel = numpy.ones((3, 3), dtype=numpy.int8)
@@ -86,31 +88,26 @@ class Cell:
         self.Row = x
         self.gameBoard.grid[x, y] = self.infectionStatus
 
-    def returnKernel(self):
-        miniboard = numpy.ones((3, 3), dtype=int)
+    def returnKernel(self, miniboard):
+
         for x in range(0, 3):
             for y in range(0, 3):
                 miniboard[x][y] = self.gameBoard.grid[self.Row-1+x% self.gameBoard.size-1][self.Row-1+y% self.gameBoard.size-1]
         miniboard[1][1] = self.infectionStatus
-        return miniboard
-
-    def getPosInGrid(self, x, y):
-        return self.Row + x, self.Column + y
 
     def move(self):
-
         newrow = self.Row
         newcol = self.Column
         if (self.infectionStatus == 1):  # move for healthy cells, finding the least crowded space
-            miniboard = self.returnKernel()
+            miniboard = numpy.ones((3, 3), dtype=int)
+            self.returnKernel(miniboard)
             neighbour = signal.convolve(miniboard, kernel, mode='same')  # count neighbors
             neighbour[1][1] = 999
             j = numpy.argwhere(neighbour == numpy.min(neighbour))
             x = random.randrange(0, len(j))
             minindex = j[x]
-            newrow, newcol = self.getPosInGrid(minindex[0] - 1, minindex[1] - 1)
-            if(self.Row < 0 or self.Column < 0):
-                print("Mini section of board\n", miniboard, "Neighbour count for section\n", neighbour, minindex, self.Row, self.Column, newrow, newcol)
+            newrow = self.Row + minindex[0]-1
+            newcol = self.Column + minindex[1]-1
 
 
         elif (self.infectionStatus == 2):
@@ -124,10 +121,9 @@ class Cell:
 
     def collision(self):
         if(self.infectionStatus == 1 and self.gameBoard.grid[self.Row, self.Column] == 2):
-            x = random.randint(0,2)
-            if (x == 2):
+            if (random.randint(0,2) == 2):
                 self.infectionStatus = 2
-                self.gameBoard.infectedCount += 1 # updating infected count of population
+                self.gameBoard.infectedCount += 1  # updating infected count of population
 
     def deathRate(self):  # All encompassing death rate function for cells.
         virus = self.hasVirus()
@@ -136,5 +132,6 @@ class Cell:
         if random.randint(0, 10) <= total:
             self.gameBoard.infectedCount -= 1
             self.gameBoard.grid[self.Row, self.Column] = 0
+            b = tm.perf_counter()
             return 1
         return 0
