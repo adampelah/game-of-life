@@ -67,6 +67,17 @@ class Board:
             cell.move()
 
 #-------------------------------Changes Below----------------------------------------------
+    def setMilli(self, label):
+        if label == 'Very Fast':
+            millisec = 1
+        if label == 'Fast':
+            millisec = 2
+        if label == 'Slow':
+            millisec = 3
+
+    def setFrames(self, val):
+        frames = val
+
     def simulate(self, event):
         while len(self.cell_list) > self.population / 4:  # Visualize the grid
             plt.imshow(self.grid, 'cividis')
@@ -79,21 +90,21 @@ class Board:
             plt.clf()
 
     def menu(self):
-        plt.figtext(0.5, .85,'The Game of Life',color='#0e7a0d',fontsize='xx-large',            # menu title
+        plt.figtext(0.5, .85,'The Game of Life',color='#0e7a0d',fontsize='xx-large',
                     fontstyle='oblique',fontweight='heavy',horizontalalignment='center')
 
         state_ax = plt.axes([0.3, 0.6, 0.3, 0.1], fc='#ededed')
-        state_box = TextBox(state_ax, 'Enter State: ', label_pad=0.05, hovercolor='#e3fbe3')    # state selection
+        state_box = TextBox(state_ax, 'Enter State: ', label_pad=0.05, hovercolor='#e3fbe3')
         state_box.on_submit(self.createPopulation)
 
         days_ax = plt.axes([0.3, 0.45, 0.5, 0.05], fc='#ededed')
-        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)       #days selection
-        #days_slider.on_update(foo)
+        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)
+        days_slider.on_changed(self.setFrames)
 
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
-        speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))                    #speed selection
-        #speed_buttons.on_clicked(foo)
+        speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))
+        speed_buttons.on_clicked(self.setMilli)
         start_ax = plt.axes([0.67, 0.1, 0.2, 0.075], fc='#ededed')
-        start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')               #start button
+        start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')
         start_button.on_clicked(self.simulate)
         plt.show()
