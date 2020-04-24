@@ -79,21 +79,21 @@ class Board:
             plt.clf()
 
     def menu(self):
-        plt.figtext(0.5, .85,'The Game of Life',color='#0e7a0d',fontsize='xx-large',
+        plt.figtext(0.5, .85,'The Game of Life',color='#0e7a0d',fontsize='xx-large',            # menu title
                     fontstyle='oblique',fontweight='heavy',horizontalalignment='center')
 
         state_ax = plt.axes([0.3, 0.6, 0.3, 0.1], fc='#ededed')
-        state_box = TextBox(state_ax, 'Enter State: ', label_pad=0.05, hovercolor='#e3fbe3')
+        state_box = TextBox(state_ax, 'Enter State: ', label_pad=0.05, hovercolor='#e3fbe3')    # state selection
         state_box.on_submit(self.createPopulation)
 
         days_ax = plt.axes([0.3, 0.45, 0.5, 0.05], fc='#ededed')
-        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)
+        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)       #days selection
         #days_slider.on_update(foo)
 
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
-        speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))
+        speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))                    #speed selection
         #speed_buttons.on_clicked(foo)
         start_ax = plt.axes([0.67, 0.1, 0.2, 0.075], fc='#ededed')
-        start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')
+        start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')               #start button
         start_button.on_clicked(self.simulate)
         plt.show()
