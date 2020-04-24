@@ -84,13 +84,8 @@ class Board:
     def simulate(self, event):
 
         # Different version of plotting, use  def update_grid(self, framenum, img):
-        self.iterations = self.days
+        frames = int(self.days)
         updateInterval = self.millisec
-        print(self.days)
-        print(self.millisec)
-        print('aosdfjoasd')
-        print(self.iterations)
-        print(updateInterval)
         Writer = animation.writers['ffmpeg']
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         fig, ax = plt.subplots()
@@ -129,7 +124,7 @@ class Board:
         state_box.on_submit(self.createPopulation)
 
         days_ax = plt.axes([0.3, 0.45, 0.5, 0.05], fc='#ededed')
-        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)
+        days_slider = Slider(days_ax, 'Number of days: ', 1, 500, valinit=45, valstep = 1)
         days_slider.on_changed(self.setDays)
 
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
