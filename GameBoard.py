@@ -84,13 +84,13 @@ class Board:
     def simulate(self, event):
 
         # Different version of plotting, use  def update_grid(self, framenum, img):
-        frames = int(self.days)
+        self.iterations = self.days
         updateInterval = self.millisec
         Writer = animation.writers['ffmpeg']
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         fig, ax = plt.subplots()
         img = ax.imshow(self.grid, interpolation='nearest')
-        print("Running simulation...")
+        plt.figtext(0.5, .1, 'Running simulation...', fontsize='large', horizontalalignment='center')
         ani = animation.FuncAnimation(fig, self.update_grid, fargs=(img,),
                                       frames=frames,
                                       blit=True,
@@ -98,6 +98,9 @@ class Board:
         a = time.perf_counter()
         ani.save('lines.mp4', writer=writer)
         b = time.perf_counter()
+        runtime_ax = plt.axes([0.3, 0.87, 0.3, 0.1])
+        runtime_box = TextBox(runtime_ax, 'Runetime: ', label_pab=0.05,)
+        runtime_box.set_val(b - a)
         print("Runtime: ", b - a)
         cap = cv2.VideoCapture('lines.mp4')
         while True:
@@ -124,7 +127,7 @@ class Board:
         state_box.on_submit(self.createPopulation)
 
         days_ax = plt.axes([0.3, 0.45, 0.5, 0.05], fc='#ededed')
-        days_slider = Slider(days_ax, 'Number of days: ', 1, 500, valinit=45, valstep = 1)
+        days_slider = Slider(days_ax, 'Number of days: ', 1, 90, valinit=45, valstep = 1)
         days_slider.on_changed(self.setDays)
 
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
