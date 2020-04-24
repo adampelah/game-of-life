@@ -104,6 +104,7 @@ class Board:
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
         speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))
         speed_buttons.on_clicked(self.setMilli)
+        
         start_ax = plt.axes([0.67, 0.1, 0.2, 0.075], fc='#ededed')
         start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')
         start_button.on_clicked(self.simulate)
