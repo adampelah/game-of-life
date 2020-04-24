@@ -22,8 +22,8 @@ class Board:
     cell_list = []
     infectedCount = 0
     population = 0
-    days = 0
-    millisec = 0
+    days = 45
+    millisec = 100
 
     def __init__(self, inSize):  # creating parameter for user
 
@@ -86,6 +86,11 @@ class Board:
         # Different version of plotting, use  def update_grid(self, framenum, img):
         self.iterations = self.days
         updateInterval = self.millisec
+        print(self.days)
+        print(self.millisec)
+        print('aosdfjoasd')
+        print(self.iterations)
+        print(updateInterval)
         Writer = animation.writers['ffmpeg']
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         fig, ax = plt.subplots()
@@ -137,12 +142,12 @@ class Board:
         plt.show()
 
     def setMilli(self, label):
-            if label == 'Very Fast':
-                self.millisec = 500
-            if label == 'Fast':
-                self.millisec = 100
-            if label == 'Slow':
-                self.millisec = 50
+        if label == 'Very Fast':
+            self.millisec=50
+        if label == 'Fast':
+            self.millisec=100
+        if label == 'Slow':
+            self.millisec=500
 
     def setDays(self, val):
             self.days = val
