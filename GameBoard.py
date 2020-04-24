@@ -90,7 +90,7 @@ class Board:
             plt.clf()
 
     def menu(self):
-        plt.figtext(0.5, .85,'The Game of Life',color='#0e7a0d',fontsize='xx-large',
+        plt.figtext(0.5, .85,'Germ Theory',color='#0e7a0d',fontsize='xx-large',
                     fontstyle='oblique',fontweight='heavy',horizontalalignment='center')
 
         state_ax = plt.axes([0.3, 0.6, 0.3, 0.1], fc='#ededed')
