@@ -98,7 +98,7 @@ class Board:
         a = time.perf_counter()
         ani.save('lines.mp4', writer=writer)
         b = time.perf_counter()
-        runtime_ax = plt.axes([0.3, 0.87, 0.3, 0.1])
+        runtime_ax = plt.axes([0.3, 0.87, 0.3, 0.05])
         runtime_box = TextBox(runtime_ax, 'Runetime: ', label_pab=0.05,)
         runtime_box.set_val(b - a)
         print("Runtime: ", b - a)
