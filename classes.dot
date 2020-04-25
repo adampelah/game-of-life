@@ -1,0 +1,6 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{Board|cell_list : list\ldays\ldays : int\lgrid\lgrid\linfectedCount : int\linfectedCount : int\lmillisec : int\lmillisec : int\lpopulation : int\lpopulation : int\lsize\lsize : int\l|createPopulation()\lgetPercentInfected()\lmenu()\lrelativePopulation()\lsetDays()\lsetMilli()\lsimulate()\lupdate_grid()\l}", shape="record"];
+"1" [label="{Cell|Column\lColumn : int\lRow\lRow : int\lage\lage : int\lgameBoard\linfectionStatus : int\linfectionStatus : int\ltime : int\ltimeHealthy\ltimeHealthy : int\ltimeVirus\ltimeVirus : int\l|addYear()\lcollision()\ldeathRate()\lgetAge()\lgetColumn()\lgetInfectionStatus()\lgetRow()\lget_timeHealthy()\lget_timeVirus()\lhasVirus()\lisOld()\lisVulnerable()\lmove()\lreturnKernel()\lsetInfectionStatus()\lsetPos()\lset_timeHealthy()\lset_timeVirus()\l}", shape="record"];
+}
