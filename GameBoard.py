@@ -23,7 +23,7 @@ class Board:
     infectedCount = 0
     population = 0
     days = 45
-    millisec = 100
+    millisec = 50
 
     def __init__(self, inSize):  # creating parameter for user
 
