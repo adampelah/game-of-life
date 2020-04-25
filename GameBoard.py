@@ -90,6 +90,8 @@ class Board:
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         fig, ax = plt.subplots()
         img = ax.imshow(self.grid, interpolation='nearest')
+        xticks([])
+        yticks([])
         print("Running simulation...")
         ani = animation.FuncAnimation(fig, self.update_grid, fargs=(img,),
                                       frames=frames,
