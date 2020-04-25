@@ -8,7 +8,6 @@ from Cell import Cell
 import info
 import cv2
 import time
-import timeit
 
 matplotlib.use('TkAgg')
 
@@ -23,7 +22,7 @@ class Board:
     infectedCount = 0
     population = 0
     days = 45
-    millisec = 50
+    millisec = 100
 
     def __init__(self, inSize):  # creating parameter for user
 
@@ -82,63 +81,55 @@ class Board:
         return img,
 
     def simulate(self, event):
-
-        # Different version of plotting, use  def update_grid(self, framenum, img):
+        j = plt.figtext(0.5, .1, 'Running simulation...', fontsize='large', horizontalalignment='center') # Set figure
+        plt.draw()
         frames = int(self.days)
         updateInterval = self.millisec
-        Writer = animation.writers['ffmpeg']
+
+        Writer = animation.writers['ffmpeg'] # Set up writer
         writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
         fig, ax = plt.subplots()
         img = ax.imshow(self.grid, interpolation='nearest')
-        xticks([])
-        yticks([])
-        print("Running simulation...")
-        ani = animation.FuncAnimation(fig, self.update_grid, fargs=(img,),
-                                      frames=frames,
-                                      blit=True,
-                                      interval=updateInterval)
+        ani = animation.FuncAnimation(fig, self.update_grid, fargs=(img,), frames=frames, interval=updateInterval) # Animate
         a = time.perf_counter()
         ani.save('lines.mp4', writer=writer)
         b = time.perf_counter()
-        print("Runtime: ", b - a)
+        j.set_visible(False)
+        f = plt.figure(1)
+        s = "Runtime: " + str(round((b-a), 2)) + " seconds." # Get runtime
+        plt.figtext(0.5, .1, s, fontsize='large', horizontalalignment='center')
+        plt.draw()
         cap = cv2.VideoCapture('lines.mp4')
-        while True:
-
+        while True: # Play video
             ret, frame = cap.read()
             if ret == True:
-
                 cv2.imshow('frame', frame)
                 if cv2.waitKey(updateInterval) & 0xFF == ord('q'):
                     break
-
             else:
                 break
-
         cap.release()
         cv2.destroyAllWindows()
-
+        return
     def menu(self):
-        plt.figtext(0.5, .85,'Germ Theory',color='#0e7a0d',fontsize='xx-large',
+        plt.figtext(0.5, .85,'Germ Theory',color='#0e7a0d',fontsize='xx-large', # Set up GUI
                     fontstyle='oblique',fontweight='heavy',horizontalalignment='center')
-
         state_ax = plt.axes([0.3, 0.6, 0.3, 0.1], fc='#ededed')
         state_box = TextBox(state_ax, 'Enter State: ', label_pad=0.05, hovercolor='#e3fbe3')
         state_box.on_submit(self.createPopulation)
-
         days_ax = plt.axes([0.3, 0.45, 0.5, 0.05], fc='#ededed')
-        days_slider = Slider(days_ax, 'Number of days: ', 1, 500, valinit=45, valstep = 1)
+        days_slider = Slider(days_ax, 'Number of days: ', 1, 500, valinit=250, valstep = 1)
         days_slider.on_changed(self.setDays)
-
         speed_ax = plt.axes([0.3, 0.2, 0.15, 0.15], fc='#ededed')
-        speed_buttons = RadioButtons(speed_ax,('Very Fast', 'Fast', 'Slow'))
+        speed_buttons = RadioButtons(speed_ax, ('Very Fast', 'Fast', 'Slow'))
         speed_buttons.on_clicked(self.setMilli)
         start_ax = plt.axes([0.67, 0.1, 0.2, 0.075], fc='#ededed')
-
         start_button = Button(start_ax, 'Start Simulation', hovercolor='#e3fbe3')
         start_button.on_clicked(self.simulate)
         plt.show()
 
-    def setMilli(self, label):
+    def setMilli(self, label): # Set speed
         if label == 'Very Fast':
             self.millisec=50
         if label == 'Fast':

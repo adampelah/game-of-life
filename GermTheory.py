@@ -8,6 +8,4 @@ def main():
     b1 = Board(100)  # Create board
     b1.menu()  # Show
 
-
 main()
-sys.exit()

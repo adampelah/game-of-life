@@ -13,7 +13,7 @@ kernel[1, 1] = 0
 
 class Cell:
     # -----------------------------------------------------------------------------------
-    # core atributes
+    # core attributes
     infectionStatus = 0  # once a Cell is not alive, it should destruct, and return false
     Column = 0  # tracking position of the Cell
     Row = 0
@@ -80,7 +80,7 @@ class Cell:
 
     # move functions---------------------------------------------------------------------------------
     def setPos(self,x,y): # setting x,y coords
-                        # this function checks the bounds of the board
+        # this function checks the bounds of the board
         if(x > self.gameBoard.size -1 or y > self.gameBoard.size-1 or x < 0 or y < 0):
             return
         self.gameBoard.grid[self.Row][self.Column] = 0
@@ -125,13 +125,12 @@ class Cell:
                 self.infectionStatus = 2
                 self.gameBoard.infectedCount += 1  # updating infected count of population
 
-    def deathRate(self):  # All encompassing death rate function for cells.
+    def deathRate(self):  # All encopassing death rate function for cells.
         virus = self.hasVirus()
         vulnerable = self.isVulnerable()
         total = (vulnerable + virus)
         if random.randint(0, 10) <= total:
             self.gameBoard.infectedCount -= 1
             self.gameBoard.grid[self.Row, self.Column] = 0
-            b = tm.perf_counter()
             return 1
         return 0
